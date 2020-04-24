@@ -460,7 +460,7 @@ port_exist_check() {
     fi
 }
 acme() {
-    if "$HOME"/.acme.sh/acme.sh --issue -d "${domain}" --standalone -k ec-256 --force --test; then
+    if "$HOME"/ubuntu/.acme.sh/acme.sh --issue -d "${domain}" --standalone -k ec-256 --force --test; then
         echo -e "${OK} ${GreenBG} SSL 证书测试签发成功，开始正式签发 ${Font}"
         rm -rf "$HOME/.acme.sh/${domain}_ecc"
         sleep 2
@@ -470,11 +470,11 @@ acme() {
         exit 1
     fi
 
-    if "$HOME"/.acme.sh/acme.sh --issue -d "${domain}" --standalone -k ec-256 --force; then
+    if "$HOME"/ubuntu/.acme.sh/acme.sh --issue -d "${domain}" --standalone -k ec-256 --force; then
         echo -e "${OK} ${GreenBG} SSL 证书生成成功 ${Font}"
         sleep 2
         mkdir /data
-        if "$HOME"/.acme.sh/acme.sh --installcert -d "${domain}" --fullchainpath /data/v2ray.crt --keypath /data/v2ray.key --ecc --force; then
+        if "$HOME"/ubuntu/.acme.sh/acme.sh --installcert -d "${domain}" --fullchainpath /data/v2ray.crt --keypath /data/v2ray.key --ecc --force; then
             echo -e "${OK} ${GreenBG} 证书配置成功 ${Font}"
             sleep 2
         fi
@@ -708,7 +708,6 @@ nginx_systemd() {
 [Unit]
 Description=The NGINX HTTP and reverse proxy server
 After=syslog.target network.target remote-fs.target nss-lookup.target
-
 [Service]
 Type=forking
 PIDFile=/etc/nginx/logs/nginx.pid
@@ -717,7 +716,6 @@ ExecStart=/etc/nginx/sbin/nginx -c ${nginx_dir}/conf/nginx.conf
 ExecReload=/etc/nginx/sbin/nginx -s reload
 ExecStop=/bin/kill -s QUIT \$MAINPID
 PrivateTmp=true
-
 [Install]
 WantedBy=multi-user.target
 EOF
