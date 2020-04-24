@@ -47,7 +47,7 @@ nginx_systemd_file="/etc/systemd/system/nginx.service"
 v2ray_systemd_file="/etc/systemd/system/v2ray.service"
 v2ray_access_log="/var/log/v2ray/access.log"
 v2ray_error_log="/var/log/v2ray/error.log"
-amce_sh_file="/root/.acme.sh/acme.sh"
+amce_sh_file="/home/ubuntu/.acme.sh/acme.sh"
 ssl_update_file="/usr/bin/ssl_update.sh"
 nginx_version="1.16.1"
 openssl_version="1.1.1g"
@@ -600,11 +600,11 @@ nginx_process_disabled() {
 acme_cron_update() {
     wget -N -P /usr/bin --no-check-certificate "https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/dev/ssl_update.sh"
     if [[ "${ID}" == "centos" ]]; then
-        #        sed -i "/acme.sh/c 0 3 * * 0 \"/root/.acme.sh\"/acme.sh --cron --home \"/root/.acme.sh\" \
+        #        sed -i "/acme.sh/c 0 3 * * 0 \"/home/ubuntu/.acme.sh\"/acme.sh --cron --home \"/home/ubuntu/.acme.sh\" \
         #        &> /dev/null" /var/spool/cron/root
         sed -i "/acme.sh/c 0 3 * * 0 bash ${ssl_update_file}" /var/spool/cron/root
     else
-        #        sed -i "/acme.sh/c 0 3 * * 0 \"/root/.acme.sh\"/acme.sh --cron --home \"/root/.acme.sh\" \
+        #        sed -i "/acme.sh/c 0 3 * * 0 \"/home/ubuntu/.acme.sh\"/acme.sh --cron --home \"/home/ubuntu/.acme.sh\" \
         #        &> /dev/null" /var/spool/cron/crontabs/root
         sed -i "/acme.sh/c 0 3 * * 0 bash ${ssl_update_file}" /var/spool/cron/crontabs/root
     fi
@@ -756,7 +756,7 @@ show_error_log() {
     [ -f ${v2ray_error_log} ] && tail -f ${v2ray_error_log} || echo -e "${RedBG}log文件不存在${Font}"
 }
 ssl_update_manuel() {
-    [ -f ${amce_sh_file} ] && "/root/.acme.sh"/acme.sh --cron --home "/root/.acme.sh" || echo -e "${RedBG}证书签发工具不存在，请确认你是否使用了自己的证书${Font}"
+    [ -f ${amce_sh_file} ] && "/home/ubuntu/.acme.sh"/acme.sh --cron --home "/home/ubuntu/.acme.sh" || echo -e "${RedBG}证书签发工具不存在，请确认你是否使用了自己的证书${Font}"
     domain="$(info_extraction '\"add\"')"
     "$HOME"/.acme.sh/acme.sh --installcert -d "${domain}" --fullchainpath /data/v2ray.crt --keypath /data/v2ray.key --ecc
 }
@@ -792,7 +792,7 @@ uninstall_all() {
     echo -e "${OK} ${GreenBG} 已卸载，SSL证书文件已保留 ${Font}"
 }
 delete_tls_key_and_crt() {
-    [[ -f $HOME/.acme.sh/acme.sh ]] && /root/.acme.sh/acme.sh uninstall >/dev/null 2>&1
+    [[ -f $HOME/.acme.sh/acme.sh ]] && /home/ubuntu/.acme.sh/acme.sh uninstall >/dev/null 2>&1
     [[ -d $HOME/.acme.sh ]] && rm -rf "$HOME/.acme.sh"
     echo -e "${OK} ${GreenBG} 已清空证书遗留文件 ${Font}"
 }
